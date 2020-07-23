@@ -1,4 +1,4 @@
-import { MongoRepository, getMongoRepository, FindManyOptions } from 'typeorm';
+import { MongoRepository, getMongoRepository } from 'typeorm';
 import IToolsRepository from '@modules/tools/repositories/IToolsRepository';
 import ICreateToolDTO from '@modules/tools/dtos/ICreateToolDTO';
 import IFindAllDTO from '@modules/tools/dtos/IFindAllDTO';
@@ -11,20 +11,26 @@ export default class ToolsRepository implements IToolsRepository {
     this.ormRepository = getMongoRepository(Tool);
   }
 
-  async findAll({ tag }: IFindAllDTO): Promise<Tool[]> {
-    let queryOptions: FindManyOptions<Tool> | undefined;
-
-    if (tag) {
-      queryOptions = {
-        where: {
-          tags: { $all: [tag] },
-        },
-      };
+  async findAll(filter: IFindAllDTO): Promise<Tool[]> {
+    if (!filter) {
+      const tools = await this.ormRepository.find();
+      return tools;
     }
 
-    const tools = await this.ormRepository.find(queryOptions);
+    const { tag } = filter;
+
+    const tools = await this.ormRepository.find({
+      where: {
+        tags: { $all: [tag] },
+      },
+    });
 
     return tools;
+  }
+
+  async findOneById(id: string): Promise<Tool | undefined> {
+    const tool = await this.ormRepository.findOne(id);
+    return tool;
   }
 
   async create({
@@ -45,13 +51,7 @@ export default class ToolsRepository implements IToolsRepository {
     return tool;
   }
 
-  async deleteById(id: string): Promise<void> {
-    const tool = await this.ormRepository.findOne(id);
-
-    if (!tool) {
-      return;
-    }
-
+  async delete(tool: Tool): Promise<void> {
     await this.ormRepository.delete(tool);
   }
 }

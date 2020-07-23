@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import IToolsRepository from '../repositories/IToolsRepository';
 import Tool from '../infra/typeorm/schemas/Tool';
+import IFindAllDTO from '../dtos/IFindAllDTO';
 
 interface IRequest {
   tag?: string;
@@ -14,7 +15,14 @@ export default class ListToolsService {
   ) {}
 
   public async execute({ tag }: IRequest): Promise<Tool[]> {
-    const tools = this.toolsRepository.findAll({ tag });
+    let filter: IFindAllDTO | undefined;
+
+    if (tag) {
+      filter = { tag };
+    }
+
+    const tools = this.toolsRepository.findAll(filter);
+
     return tools;
   }
 }

@@ -4,9 +4,11 @@ import IFindAllDTO from '../dtos/IFindAllDTO';
 import ICreateToolDTO from '../dtos/ICreateToolDTO';
 
 export default interface IToolsRepository {
-  findAll(data: IFindAllDTO): Promise<Tool[]>;
+  findAll(data?: IFindAllDTO): Promise<Tool[]>;
+
+  findOneById(id: string): Promise<Tool | undefined>;
 
   create(data: ICreateToolDTO): Promise<Tool>;
 
-  deleteById(id: string): Promise<void>;
+  delete(tool: Tool): Promise<void>;
 }

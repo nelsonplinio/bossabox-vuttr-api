@@ -7,4 +7,3 @@ container.registerSingleton<IToolsRepository>(
   'ToolsRepository',
   ToolsRepository,
 );
-// container.register('repository name', interface)
