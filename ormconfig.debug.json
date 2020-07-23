@@ -1,13 +1,11 @@
-[
-  {
-    "name": "mongo",
-    "type": "mongodb",
-    "host": "localhost",
-    "port": 27017,
-    "database": "vuttr",
-    "useUnifiedTopology": true,
-    "entities": [
-      "./src/modules/**/infra/typeorm/schemas/*.ts"
-    ]
-  }
-]
+{
+  "type": "mongodb",
+  "host": "localhost",
+  "port": 27017,
+  "database": "vuttr",
+  "useUnifiedTopology": true,
+  "entities": [
+    "./src/modules/**/infra/typeorm/schemas/*.ts"
+  ]
+}
+
