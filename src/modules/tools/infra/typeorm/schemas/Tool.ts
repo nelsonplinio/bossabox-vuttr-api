@@ -1,16 +1,15 @@
 import {
-  Entity,
   Column,
-  ObjectIdColumn,
-  ObjectID,
   CreateDateColumn,
+  Entity,
+  ObjectIdColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('tools')
 class Tool {
   @ObjectIdColumn()
-  id: ObjectID;
+  id: string;
 
   @Column()
   title: string;

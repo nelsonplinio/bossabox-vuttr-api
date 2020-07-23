@@ -1,4 +1,4 @@
-import { Inject } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import IToolsRepository from '../repositories/IToolsRepository';
 import Tool from '../infra/typeorm/schemas/Tool';
 
@@ -8,10 +8,10 @@ interface IRequest {
   link: string;
   tags: string[];
 }
-
+@injectable()
 export default class CreateToolService {
   constructor(
-    @Inject('ToolsRepository')
+    @inject('ToolsRepository')
     private toolsRepository: IToolsRepository,
   ) {}
 

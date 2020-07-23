@@ -1,3 +1,9 @@
-// import { container } from 'tsyringe';
+import { container } from 'tsyringe';
 
-import '@modules/tools/providers';
+import IToolsRepository from '@modules/tools/repositories/IToolsRepository';
+import ToolsRepository from '@modules/tools/infra/typeorm/repositories/ToolsRepository';
+
+container.registerSingleton<IToolsRepository>(
+  'ToolsRepository',
+  ToolsRepository,
+);

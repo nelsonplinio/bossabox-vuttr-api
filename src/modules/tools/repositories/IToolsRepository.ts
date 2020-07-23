@@ -1,11 +1,10 @@
 import Tool from '../infra/typeorm/schemas/Tool';
 
+import IFindAllDTO from '../dtos/IFindAllDTO';
 import ICreateToolDTO from '../dtos/ICreateToolDTO';
 
 export default interface IToolsRepository {
-  findAll(): Promise<Tool[]>;
-
-  findAllByTag(tag: string): Promise<Tool[]>;
+  findAll(data: IFindAllDTO): Promise<Tool[]>;
 
   create(data: ICreateToolDTO): Promise<Tool>;
 
