@@ -48,6 +48,14 @@ Está aplicação foi desenvolvida utilizando <b>Node.Js</b> com <b>Typescript</
 ##### 😁 Pronto !!🎉
     Api está rodando na porta :3000
 
+
+##### 🧪Rodar Testes !!
+    yarn test
+
+    ou 
+
+    npm run test 
+    
 ## ⚙️ Oque foi utilizado
   - <a href='https://nodejs.org/en/'>Node.Js</a>
   - <a href='https://expressjs.com/'>Express</a>
