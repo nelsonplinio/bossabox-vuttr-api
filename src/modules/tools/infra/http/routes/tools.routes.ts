@@ -1,10 +1,13 @@
 import { Router } from 'express';
 import { celebrate, Joi, Segments } from 'celebrate';
 
+import ensureAuthenticationMiddleware from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 import ToolsController from '../controllers/ToolsController';
 
 const toolsRoutes = Router();
 const toolsController = new ToolsController();
+
+toolsRoutes.use(ensureAuthenticationMiddleware);
 
 toolsRoutes.post(
   '/',
