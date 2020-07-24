@@ -4,7 +4,7 @@ import IFindAllDTO from '../dtos/IFindAllDTO';
 import ICreateToolDTO from '../dtos/ICreateToolDTO';
 
 export default interface IToolsRepository {
-  findAll(data?: IFindAllDTO): Promise<Tool[]>;
+  findAll(data: IFindAllDTO): Promise<Tool[]>;
 
   findOneById(id: string): Promise<Tool | undefined>;
 

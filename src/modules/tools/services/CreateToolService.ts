@@ -7,6 +7,7 @@ interface IRequest {
   description: string;
   link: string;
   tags: string[];
+  user_id: string;
 }
 @injectable()
 export default class CreateToolService {
@@ -20,12 +21,14 @@ export default class CreateToolService {
     description,
     link,
     tags,
+    user_id,
   }: IRequest): Promise<Tool> {
     const tool = await this.toolsRepository.create({
       title,
       description,
       link,
       tags,
+      user_id,
     });
 
     return tool;

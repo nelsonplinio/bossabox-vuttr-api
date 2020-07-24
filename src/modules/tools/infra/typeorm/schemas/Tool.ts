@@ -18,6 +18,9 @@ class Tool {
   link: string;
 
   @Column()
+  user_id: string;
+
+  @Column()
   description: string;
 
   @Column()

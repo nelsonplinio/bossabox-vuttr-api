@@ -3,4 +3,5 @@ export default interface ICreateToolDTO {
   link: string;
   description: string;
   tags: string[];
+  user_id: string;
 }

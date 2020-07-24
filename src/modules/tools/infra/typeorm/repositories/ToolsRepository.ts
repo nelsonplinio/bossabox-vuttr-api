@@ -11,18 +11,18 @@ export default class ToolsRepository implements IToolsRepository {
     this.ormRepository = getMongoRepository(Tool);
   }
 
-  async findAll(filter: IFindAllDTO): Promise<Tool[]> {
-    if (!filter) {
-      const tools = await this.ormRepository.find();
-      return tools;
+  async findAll({ user_id, tag }: IFindAllDTO): Promise<Tool[]> {
+    const where = {
+      user_id,
+      tags: { $all: tag && [tag] },
+    };
+
+    if (!tag) {
+      delete where.tags;
     }
 
-    const { tag } = filter;
-
     const tools = await this.ormRepository.find({
-      where: {
-        tags: { $all: [tag] },
-      },
+      where,
     });
 
     return tools;
@@ -38,12 +38,14 @@ export default class ToolsRepository implements IToolsRepository {
     link,
     tags,
     title,
+    user_id,
   }: ICreateToolDTO): Promise<Tool> {
     const tool = this.ormRepository.create({
       title,
       description,
       link,
       tags,
+      user_id,
     });
 
     await this.ormRepository.save(tool);
