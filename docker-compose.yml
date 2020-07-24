@@ -1,0 +1,9 @@
+version: '2'
+services:
+  database:
+    container_name: vuttr-database
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+
