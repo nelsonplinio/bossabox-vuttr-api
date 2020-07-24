@@ -13,6 +13,7 @@ describe('CreateToolService', () => {
 
   it('should be able to create a tool', async () => {
     const tool = {
+      user_id: 'user_id',
       title: 'hotel',
       link: 'https://github.com/typicode/hotel',
       description:

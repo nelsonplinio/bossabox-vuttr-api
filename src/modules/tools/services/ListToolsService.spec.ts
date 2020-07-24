@@ -15,6 +15,7 @@ describe('ListToolService', () => {
     const toolsToSave = [
       {
         title: 'hotel',
+        user_id: 'user_id',
         link: 'https://github.com/typicode/hotel',
         description:
           'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
@@ -22,6 +23,7 @@ describe('ListToolService', () => {
       },
       {
         title: 'hotel',
+        user_id: 'user_id',
         link: 'https://github.com/typicode/hotel',
         description:
           'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
@@ -33,7 +35,7 @@ describe('ListToolService', () => {
       toolsToSave.map(tool => fakeToolsRepository.create(tool)),
     );
 
-    const tools = await listToolsService.execute({});
+    const tools = await listToolsService.execute({ user_id: 'user_id' });
 
     expect(tools).toEqual(expect.arrayContaining(toolsCreated));
   });
@@ -42,6 +44,7 @@ describe('ListToolService', () => {
     const toolsToSave = [
       {
         title: 'hotel',
+        user_id: 'user_id',
         link: 'https://github.com/typicode/hotel',
         description:
           'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
@@ -49,6 +52,7 @@ describe('ListToolService', () => {
       },
       {
         title: 'hotel',
+        user_id: 'user_id',
         link: 'https://github.com/typicode/hotel',
         description:
           'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
@@ -60,8 +64,43 @@ describe('ListToolService', () => {
       toolsToSave.map(tool => fakeToolsRepository.create(tool)),
     );
 
-    const tools = await listToolsService.execute({ tag: 'node' });
+    const tools = await listToolsService.execute({
+      tag: 'node',
+      user_id: 'user_id',
+    });
 
     expect(tools).toEqual(expect.arrayContaining([toolWithTag]));
+  });
+
+  it('should not be able to list all tools with other user_id', async () => {
+    const toolsToSave = [
+      {
+        title: 'hotel',
+        user_id: 'user_id',
+        link: 'https://github.com/typicode/hotel',
+        description:
+          'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
+        tags: ['proxy'],
+      },
+      {
+        title: 'hotel',
+        user_id: 'user_id',
+        link: 'https://github.com/typicode/hotel',
+        description:
+          'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
+        tags: ['node'],
+      },
+    ];
+
+    await Promise.all(
+      toolsToSave.map(tool => fakeToolsRepository.create(tool)),
+    );
+
+    const tools = await listToolsService.execute({
+      tag: 'node',
+      user_id: 'other_user_id',
+    });
+
+    expect(tools).toEqual(expect.arrayContaining([]));
   });
 });

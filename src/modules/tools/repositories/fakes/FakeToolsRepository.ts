@@ -7,21 +7,17 @@ import IToolsRepository from '../IToolsRepository';
 export default class FakeToolsRepository implements IToolsRepository {
   private tools: Tool[] = [];
 
-  async findAll(data?: IFindAllDTO): Promise<Tool[]> {
-    if (data) {
-      const { tag } = data;
-      const tools = this.tools.filter(tool => {
-        if (!tag) {
-          return true;
-        }
+  async findAll(data: IFindAllDTO): Promise<Tool[]> {
+    const { tag } = data;
+    const tools = this.tools.filter(tool => {
+      if (!tag) {
+        return true;
+      }
 
-        return tool.tags.includes(tag);
-      });
+      return tool.tags.includes(tag);
+    });
 
-      return tools;
-    }
-
-    return this.tools;
+    return tools;
   }
 
   async create(data: ICreateToolDTO): Promise<Tool> {

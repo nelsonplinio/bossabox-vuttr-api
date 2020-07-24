@@ -15,6 +15,7 @@ describe('DeleteToolService', () => {
   it('should be able to delete a tool', async () => {
     const tool = await fakeToolsRepository.create({
       title: 'hotel',
+      user_id: 'user_id',
       link: 'https://github.com/typicode/hotel',
       description:
         'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
@@ -29,16 +30,17 @@ describe('DeleteToolService', () => {
       ],
     });
 
-    await deleteToolService.execute({ id: tool.id });
+    await deleteToolService.execute({ id: tool.id, user_id: 'user_id' });
 
-    const tools = await fakeToolsRepository.findAll();
+    const tools = await fakeToolsRepository.findAll({ user_id: 'user_id' });
 
     expect(tools).toEqual(expect.arrayContaining([]));
   });
 
-  it('should not  be able to delete a tool with incorrect id', async () => {
+  it('should not be able to delete a tool with incorrect id', async () => {
     await fakeToolsRepository.create({
       title: 'hotel',
+      user_id: 'user_id',
       link: 'https://github.com/typicode/hotel',
       description:
         'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
@@ -54,7 +56,30 @@ describe('DeleteToolService', () => {
     });
 
     await expect(
-      deleteToolService.execute({ id: 'incorrect_id' }),
+      deleteToolService.execute({ id: 'incorrect_id', user_id: 'user_id' }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to delete a tool with incorrect user id', async () => {
+    const tool = await fakeToolsRepository.create({
+      title: 'hotel',
+      user_id: 'user_id',
+      link: 'https://github.com/typicode/hotel',
+      description:
+        'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
+      tags: [
+        'node',
+        'organizing',
+        'webapps',
+        'domain',
+        'developer',
+        'https',
+        'proxy',
+      ],
+    });
+
+    await expect(
+      deleteToolService.execute({ id: tool.id, user_id: 'incorret_user_id' }),
     ).rejects.toBeInstanceOf(AppError);
   });
 });
