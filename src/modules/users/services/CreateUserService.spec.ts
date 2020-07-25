@@ -1,35 +1,46 @@
-// import 'reflect-metadata';
-// import FakeToolsRepository from '../repositories/fakes/FakeToolsRepository';
-// import CreateToolService from './CreateToolService';
+import 'reflect-metadata';
+import AppError from '@shared/errors/AppError';
+import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import CreateUserService from './CreateUserService';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 
-// let fakeToolsRepository: FakeToolsRepository;
-// let createToolService: CreateToolService;
+let hashProvider: IHashProvider;
+let fakeUsersRepository: FakeUsersRepository;
+let createUserService: CreateUserService;
 
-// describe('CreateToolService', () => {
-//   beforeEach(() => {
-//     fakeToolsRepository = new FakeToolsRepository();
-//     createToolService = new CreateToolService(fakeToolsRepository);
-//   });
+describe('authenticationUserService', () => {
+  beforeEach(() => {
+    hashProvider = new FakeHashProvider();
+    fakeUsersRepository = new FakeUsersRepository();
+    createUserService = new CreateUserService(
+      fakeUsersRepository,
+      hashProvider,
+    );
+  });
 
-//   it('should be able to create a tool', async () => {
-//     const tool = {
-//       title: 'hotel',
-//       link: 'https://github.com/typicode/hotel',
-//       description:
-//         'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
-//       tags: [
-//         'node',
-//         'organizing',
-//         'webapps',
-//         'domain',
-//         'developer',
-//         'https',
-//         'proxy',
-//       ],
-//     };
+  it('should be able to create user', async () => {
+    const user = await createUserService.execute({
+      name: 'user',
+      email: 'user@email.com',
+      password: 'password',
+    });
 
-//     const toolCreated = await createToolService.execute(tool);
+    expect(user).toHaveProperty('id');
+  });
 
-//     expect(toolCreated).toHaveProperty('id');
-//   });
-// });
+  it('should not be able to create user with email not available', async () => {
+    await createUserService.execute({
+      name: 'user',
+      email: 'user@email.com',
+      password: 'password',
+    });
+    await expect(
+      createUserService.execute({
+        name: 'user',
+        email: 'user@email.com',
+        password: 'password',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+});
