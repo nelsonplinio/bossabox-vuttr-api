@@ -3,6 +3,47 @@ FORMAT: 1A
 # VUTTR API DOCUMENTATION
   Uma aplicação VUTTR (Very Useful Tools to Remember). A aplicação é um simples repositório para gerenciar ferramentas
 
+# Group Authentication
+
+## User [/users]
+
+### Criar um usuário [POST]
++ Request(application/json)
+    + Body 
+        {
+            "name": "user_name",
+            "email": "user@email.com",
+            "password": "password123",
+        }
+
++ Response(application/json)
+    + Body 
+        {
+            "id": "unic_id",
+            "name": "user_name",
+            "email": "user@email.com",
+        }
+        
+## Sessions [/sessions]
+
+### Autenticar usuário [POST]
++ Request (application/json)
+    + Body
+        {
+            "email": "user@email.com",
+            "password": "password123"
+        }
+
++ Response (application/json)
+    {
+        "user": {
+            "id": "unic_id",
+            "name": "user_name",
+            "email": "user@email.com"
+        },
+        "token": "user_token"
+    }
+    
 # Group Tools
 
 ## Tools [/tools]
@@ -11,6 +52,11 @@ FORMAT: 1A
   Buscar toda lista de ferramentas salvas.
 + Query (Opcional)
   + { tag="alguma_tag" }
+
++ Request 
+  + Headers
+    Authorization: Bearer { user_token } 
+
 
 + Response 200 (application/json)
   [
@@ -34,12 +80,16 @@ FORMAT: 1A
   Criar uma nova ferramenta em seu repositório.
 
 + Request (application/json)
-    {
-      "title": "hotel",
-      "link": "https://github.com/typicode/hotel",
-      "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
-      "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
-    }
+    + Headers
+      Authorization: Bearer { user_token } 
+
+    + Body
+        {
+        "title": "hotel",
+        "link": "https://github.com/typicode/hotel",
+        "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+        "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
+        }
 
 + Response 201 (application/json)
    {
@@ -48,7 +98,6 @@ FORMAT: 1A
       "link": "https://github.com/typicode/hotel",
       "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
       "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"],
-
   }
 
 ### Deletar uma ferramenta [DELETE]
@@ -56,6 +105,11 @@ FORMAT: 1A
 
 + Parameters
   + tool_id (string) - Identificador da ferramenta que irá ser deletada.
+
++ Request
+    + Headers
+        Authorization: Bearer { user_token } 
+
 
 + Response 204
    No Content
@@ -66,3 +120,4 @@ FORMAT: 1A
     "status": "error",
     "message": "Tool not found"
   }
+
